@@ -15,6 +15,9 @@ public class TaskMonth extends Task {
 
     @Override
     public boolean checkDateIsAvailable(LocalDate date) {
+        if (getCreateDate().toLocalDate().isAfter(date)){
+            return false;
+        }
         return (getCreateDate().toLocalDate().getDayOfMonth() == date.getDayOfMonth());
     }
 }
