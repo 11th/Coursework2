@@ -13,7 +13,7 @@ public class Main {
     public static final String ANSI_PURPLE = "\u001B[35m";
     public static final String ANSI_BLUE = "\u001B[34m";
 
-    private static final TaskManager<?> taskManager = new TaskManager<>();
+    private static final TaskManager taskManager = new TaskManager();
 
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {

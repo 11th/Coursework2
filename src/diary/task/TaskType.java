@@ -4,6 +4,9 @@ public enum TaskType {
     PERSONAL(1, "персональная"),
     WORK(2, "рабочая");
 
+    private final int id;
+    private final String text;
+
     public static TaskType getById(int id){
         for (TaskType value : TaskType.values()) {
             if (value.getId() == id){
@@ -20,9 +23,6 @@ public enum TaskType {
         }
         return stringBuilder.toString();
     }
-
-    private final int id;
-    private final String text;
 
     TaskType(int id, String text){
         this.id = id;

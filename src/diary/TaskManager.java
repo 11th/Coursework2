@@ -5,29 +5,31 @@ import diary.task.*;
 import java.time.LocalDate;
 import java.util.*;
 
-public class TaskManager<T extends Task> {
-    private final Map<Integer, T> tasks = new HashMap<>();
+public class TaskManager {
+    private final Map<Integer, Task> tasks = new HashMap<>();
 
     public void add(String title, String text, TaskType taskType, RepetitionType repetitionType) throws TaskException {
-        T task = null;
+        Task task = null;
         switch (repetitionType) {
             case SINGLE:
-                task = (T) new TaskSingle(title, text, taskType);
+                task = new TaskSingle(title, text, taskType);
                 break;
             case DAILY:
-                task = (T) new TaskDay(title, text, taskType);
+                task = new TaskDay(title, text, taskType);
                 break;
             case WEEKLY:
-                task = (T) new TaskWeek(title, text, taskType);
+                task = new TaskWeek(title, text, taskType);
                 break;
             case MONTHLY:
-                task = (T) new TaskMonth(title, text, taskType);
+                task = new TaskMonth(title, text, taskType);
                 break;
             case YEARLY:
-                task = (T) new TaskYear(title, text, taskType);
+                task = new TaskYear(title, text, taskType);
                 break;
         }
-        tasks.put(task.getId(), task);
+        if (task != null) {
+            tasks.put(task.getId(), task);
+        }
     }
 
     public void change(Integer id, String title, String text) throws TaskException {
@@ -46,11 +48,11 @@ public class TaskManager<T extends Task> {
         tasks.get(id).setDeleted(true);
     }
 
-    public Set<T> getTasksByDate(LocalDate date) throws TaskException {
-        Set<T> resultTasks = new HashSet<>();
+    public Set<Task> getTasksByDate(LocalDate date) throws TaskException {
+        Set<Task> resultTasks = new HashSet<>();
         for (Task task : tasks.values()) {
             if (!task.isDeleted() && task.checkDateIsAvailable(date)) {
-                resultTasks.add((T) task);
+                resultTasks.add(task);
             }
         }
         if (resultTasks.isEmpty()) {
@@ -59,24 +61,24 @@ public class TaskManager<T extends Task> {
         return resultTasks;
     }
 
-    public Map<LocalDate, Set<T>> getActiveTasks() throws TaskException {
+    public Map<LocalDate, Set<Task>> getActiveTasks() throws TaskException {
         return getTasks(false);
     }
 
-    public Map<LocalDate, Set<T>> getDeletedTasks() throws TaskException {
+    public Map<LocalDate, Set<Task>> getDeletedTasks() throws TaskException {
         return getTasks(true);
     }
 
-    private Map<LocalDate, Set<T>> getTasks(boolean onlyDeleted) throws TaskException {
-        Map<LocalDate, Set<T>> result = new HashMap<>();
+    private Map<LocalDate, Set<Task>> getTasks(boolean onlyDeleted) throws TaskException {
+        Map<LocalDate, Set<Task>> result = new HashMap<>();
         for (Task task : tasks.values()) {
             if ((onlyDeleted && task.isDeleted()) || (!onlyDeleted && !task.isDeleted())) {
-                if (!result.containsKey(task.getCreateDate().toLocalDate())){
-                    Set<T> taskSet = new HashSet<>();
-                    taskSet.add((T) task);
+                if (!result.containsKey(task.getCreateDate().toLocalDate())) {
+                    Set<Task> taskSet = new HashSet<>();
+                    taskSet.add(task);
                     result.put(task.getCreateDate().toLocalDate(), taskSet);
                 } else {
-                    result.get(task.getCreateDate().toLocalDate()).add((T) task);
+                    result.get(task.getCreateDate().toLocalDate()).add(task);
                 }
             }
         }

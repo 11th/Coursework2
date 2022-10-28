@@ -7,6 +7,9 @@ public enum RepetitionType {
     MONTHLY(4, "ежемесячная"),
     YEARLY(5, "ежегодная");
 
+    private final int id;
+    private final String text;
+
     public static RepetitionType getById(int id){
         for (RepetitionType value : RepetitionType.values()) {
             if (value.getId() == id){
@@ -23,9 +26,6 @@ public enum RepetitionType {
         }
         return stringBuilder.toString();
     }
-
-    private final int id;
-    private final String text;
 
     RepetitionType(int id, String text){
         this.id = id;
